@@ -25,9 +25,9 @@ public class CalculateRootsService extends IntentService {
         }
 
 
-        for (long i = 2; i <= (long) Math.sqrt(numberToCalculateRootsFor); ++i) {
+        for (long i = 2L; i <= (long) Math.sqrt(numberToCalculateRootsFor); ++i) {
             long timePassed = System.currentTimeMillis() - timeStartMs;
-            if (timePassed >= 20) {
+            if (timePassed >= 20L) {
                 broadcast.setAction("stopped_calculations");
                 broadcast.putExtra("original_number", numberToCalculateRootsFor);
                 broadcast.putExtra("time_until_give_up_seconds", timePassed);
@@ -43,9 +43,10 @@ public class CalculateRootsService extends IntentService {
                 return;
             }
         }
+        System.out.println(numberToCalculateRootsFor);
         broadcast.setAction("found_roots");
         broadcast.putExtra("root1", numberToCalculateRootsFor);
-        broadcast.putExtra("root2", 1);
+        broadcast.putExtra("root2", 1L);
         this.sendBroadcast(broadcast);
     /*
     TODO:
