@@ -43,13 +43,11 @@ public class CalculateRootsService extends IntentService {
                 return;
             }
         }
-        System.out.println(numberToCalculateRootsFor);
         broadcast.setAction("found_roots");
         broadcast.putExtra("root1", numberToCalculateRootsFor);
         broadcast.putExtra("root2", 1L);
         this.sendBroadcast(broadcast);
     /*
-    TODO:
      calculate the roots.
      check the time (using `System.currentTimeMillis()`) and stop calculations if can't find an answer after 20 seconds
      upon success (found a root, or found that the input number is prime):
