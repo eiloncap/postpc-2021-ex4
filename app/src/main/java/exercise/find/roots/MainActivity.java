@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     buttonCalculateRoots.setEnabled(!isWaitingForResult && Long.parseLong(newText) > 0);
                 } catch (NumberFormatException e) {
-                    Toast.makeText(MainActivity.this, NON_LONG_INPUT_MSG,Toast.LENGTH_SHORT).show();
                     buttonCalculateRoots.setEnabled(false);
                 }
             }
@@ -103,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
                 isWaitingForResult = false;
                 editTextUserInput.setEnabled(true);
                 editTextUserInput.setText("");
+
+                Intent outComingIntent = new Intent(MainActivity.this, RootResultActivity.class);
+                outComingIntent.putExtra("root1", incomingIntent.getLongExtra("root1", 0));
+                outComingIntent.putExtra("root2", incomingIntent.getLongExtra("root2", 0));
+                outComingIntent.putExtra("original_number", incomingIntent.getLongExtra("original_number", 0));
+                startActivity(outComingIntent);
             }
         };
         registerReceiver(broadcastReceiverForSuccess, new IntentFilter("found_roots"));
@@ -116,8 +122,10 @@ public class MainActivity extends AppCompatActivity {
         broadcastReceiverForFailure = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent incomingIntent) {
-                if (incomingIntent == null || !incomingIntent.getAction().equals("stopped_calculations"))
+                Log.d("time passed", "time: ");
+                if (incomingIntent == null || !incomingIntent.getAction().equals("stopped_calculations")) {
                     return;
+                }
                 progressBar.setVisibility(View.GONE);
                 isWaitingForResult = false;
                 editTextUserInput.setEnabled(true);
@@ -128,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         };
+        registerReceiver(broadcastReceiverForFailure, new IntentFilter("stopped_calculations"));
     }
 
     @Override

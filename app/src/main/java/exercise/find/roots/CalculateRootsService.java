@@ -29,7 +29,6 @@ public class CalculateRootsService extends IntentService {
             long timePassed = System.currentTimeMillis() - timeStartMs;
             if (timePassed >= 20L) {
                 broadcast.setAction("stopped_calculations");
-                broadcast.putExtra("original_number", numberToCalculateRootsFor);
                 broadcast.putExtra("time_until_give_up_seconds", timePassed);
                 this.sendBroadcast(broadcast);
                 return;
