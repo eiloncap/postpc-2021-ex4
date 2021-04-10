@@ -23,9 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isWaitingForResult = false;
     private static final String NON_LONG_INPUT_MSG = "Input must be a natural number";
     private static final String NON_POSITIVE_INPUT_MSG = "Input must be a natural number";
-    // TODO: add any other fields to the activity as you want
-//  private static Pattern pattern = Pattern.compile("\\d+");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +66,10 @@ public class MainActivity extends AppCompatActivity {
             try {
                 long userInputLong = Long.parseLong(userInputString); // todo this should be the converted string from the user
                 if (userInputLong <= 0) {
-                    Toast.makeText(MainActivity.this, NON_POSITIVE_INPUT_MSG,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, NON_POSITIVE_INPUT_MSG, Toast.LENGTH_SHORT).show();
                     editTextUserInput.setText("");
-                };
+                }
+                ;
                 intentToOpenService.putExtra("number_for_service", userInputLong);
                 startService(intentToOpenService);
                 // todo: set views states according to the spec (below)
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 editTextUserInput.setEnabled(false);
                 isWaitingForResult = true;
             } catch (NumberFormatException e) {
-                Toast.makeText(MainActivity.this, NON_LONG_INPUT_MSG,Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, NON_LONG_INPUT_MSG, Toast.LENGTH_SHORT).show();
                 editTextUserInput.setText("");
             }
         });
@@ -92,13 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 if (incomingIntent == null || !incomingIntent.getAction().equals("found_roots"))
                     return;
                 // success finding roots!
-                /*
-                 TODO: handle "roots-found" as defined in the spec (below).
-                  also:
-                   - the service found roots and passed them to you in the `incomingIntent`. extract them.
-                   - when creating an intent to open the new-activity, pass the roots as extras to the new-activity intent
-                     (see for example how did we pass an extra when starting the calculation-service)
-                 */
                 progressBar.setVisibility(View.GONE);
                 isWaitingForResult = false;
                 editTextUserInput.setEnabled(true);
@@ -113,12 +104,6 @@ public class MainActivity extends AppCompatActivity {
         };
         registerReceiver(broadcastReceiverForSuccess, new IntentFilter("found_roots"));
 
-        /*
-        todo:
-         add a broadcast-receiver to listen for abort-calculating as defined in the spec (below)
-         to show a Toast, use this code:
-         `Toast.makeText(this, "text goes here", Toast.LENGTH_SHORT).show()`
-         */
         broadcastReceiverForFailure = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent incomingIntent) {
