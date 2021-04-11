@@ -77,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
         // set click-listener to the button
         buttonCalculateRoots.setOnClickListener(v -> {
             Intent intentToOpenService = new Intent(MainActivity.this, CalculateRootsService.class);
-            // todo: check that `userInputString` is a number. handle bad input. convert `userInputString` to long
             String userInputString = editTextUserInput.getText().toString();
-            long userInputLong = Long.parseLong(userInputString); // todo this should be the converted string from the user
+            long userInputLong = Long.parseLong(userInputString);
 
             intentToOpenService.putExtra("number_for_service", userInputLong);
             startService(intentToOpenService);
-            // todo: set views states according to the spec (below)
+
+            // set views states
             progressBar.setVisibility(View.VISIBLE);
             buttonCalculateRoots.setEnabled(false);
             editTextUserInput.setEnabled(false);
@@ -97,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 if (incomingIntent == null || !incomingIntent.getAction().equals("found_roots"))
                     return;
                 // success finding roots!
+
+                // set views states
                 progressBar.setVisibility(View.GONE);
                 isWaitingForResult = false;
                 editTextUserInput.setEnabled(true);
@@ -119,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 if (incomingIntent == null || !incomingIntent.getAction().equals("stopped_calculations")) {
                     return;
                 }
+                // failure finding roots!
+
+                // set views states
                 progressBar.setVisibility(View.GONE);
                 isWaitingForResult = false;
                 editTextUserInput.setEnabled(true);
@@ -136,8 +141,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // todo: remove ALL broadcast receivers we registered earlier in onCreate().
-        //  to remove a registered receiver, call method `this.unregisterReceiver(<receiver-to-remove>)`
+        this.unregisterReceiver(broadcastReceiverForSuccess);
+        this.unregisterReceiver(broadcastReceiverForFailure);
     }
 
     @Override

@@ -1,4 +1,4 @@
-# Find Roots
+# Find Rootsm
 
 An Android exercise for developers teaching how to play around with intents, activities, services and broadcast receivers
 
