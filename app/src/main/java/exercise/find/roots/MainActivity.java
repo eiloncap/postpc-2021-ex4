@@ -22,12 +22,13 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver broadcastReceiverForSuccess = null, broadcastReceiverForFailure = null;
     private boolean isWaitingForResult = false;
     private static final String NON_NATURAL_INPUT_MSG = "Input must be a natural number";
-    private Toast invalidInputToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toast invalidInputToast = Toast.makeText(MainActivity.this, NON_NATURAL_INPUT_MSG, Toast.LENGTH_SHORT);
 
         ProgressBar progressBar = findViewById(R.id.progressBar);
         EditText editTextUserInput = findViewById(R.id.editTextInputNumber);
@@ -38,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         editTextUserInput.setText(""); // cleanup text in edit-text
         editTextUserInput.setEnabled(true); // set edit-text as enabled (user can input text)
         buttonCalculateRoots.setEnabled(false); // set button as disabled (user can't click)
-
-        invalidInputToast = Toast.makeText(MainActivity.this, NON_NATURAL_INPUT_MSG, Toast.LENGTH_SHORT);
 
         // set listener on the input written by the keyboard to the edit-text
         editTextUserInput.addTextChangedListener(new TextWatcher() {
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // send failure info
                 long calcTime = incomingIntent.getLongExtra("time_until_give_up_seconds", 0);
-                String msg = "calculation aborted after " + calcTime + " seconds";
+                String msg = "calculation aborted after " + calcTime + " milliseconds";
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         };
@@ -148,13 +147,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        // TODO: put relevant data into bundle as you see fit
+        EditText editTextUserInput = findViewById(R.id.editTextInputNumber);
+        outState.putString("key_edit_text_input", editTextUserInput.getText().toString());
+        outState.putBoolean("key_is_waiting_for_result", isWaitingForResult);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        // TODO: load data from bundle and set screen state (see spec below)
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        EditText editTextUserInput = findViewById(R.id.editTextInputNumber);
+        Button buttonCalculateRoots = findViewById(R.id.buttonCalculateRoots);
+
+        editTextUserInput.setText(savedInstanceState.getString("key_edit_text_input"));
+        isWaitingForResult = savedInstanceState.getBoolean("key_is_waiting_for_result");
+
+        String newText = editTextUserInput.getText().toString();
+        try {
+            long userInputLong = Long.parseLong(newText);
+            // unavailable or negative number
+            buttonCalculateRoots.setEnabled(!isWaitingForResult && userInputLong > 0);
+        } catch (NumberFormatException e) {
+            // not a long input
+            buttonCalculateRoots.setEnabled(false);
+        }
     }
 }
 
