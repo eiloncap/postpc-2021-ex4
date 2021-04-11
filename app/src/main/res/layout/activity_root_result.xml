@@ -41,27 +41,27 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
-        android:id="@+id/andText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="and"
-        android:textSize="21dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/title2Text"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <TextView
         android:id="@+id/root1Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="13245678"
         android:textColor="@color/purple_500"
         android:textSize="30dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@+id/title2Text"
-        app:layout_constraintRight_toLeftOf="@+id/andText"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/andText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="and"
+        android:textSize="21dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/root1Text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
         android:id="@+id/root2Text"
@@ -70,9 +70,9 @@
         android:text="13245678"
         android:textColor="@color/purple_500"
         android:textSize="30dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/title2Text"
-        app:layout_constraintLeft_toRightOf="@+id/andText"/>
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/andText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

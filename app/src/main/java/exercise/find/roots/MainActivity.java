@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver broadcastReceiverForSuccess = null, broadcastReceiverForFailure = null;
     private boolean isWaitingForResult = false;
-    private static final String NON_LONG_INPUT_MSG = "Input must be a natural number";
-    private static final String NON_POSITIVE_INPUT_MSG = "Input must be a natural number";
+    private static final String NON_NATURAL_INPUT_MSG = "Input must be a natural number";
+    private Toast invalidInputToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         editTextUserInput.setEnabled(true); // set edit-text as enabled (user can input text)
         buttonCalculateRoots.setEnabled(false); // set button as disabled (user can't click)
 
+        invalidInputToast = Toast.makeText(MainActivity.this, NON_NATURAL_INPUT_MSG, Toast.LENGTH_SHORT);
+
         // set listener on the input written by the keyboard to the edit-text
         editTextUserInput.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -51,8 +53,22 @@ public class MainActivity extends AppCompatActivity {
                 // text did change
                 String newText = editTextUserInput.getText().toString();
                 try {
-                    buttonCalculateRoots.setEnabled(!isWaitingForResult && Long.parseLong(newText) > 0);
+                    long userInputLong = Long.parseLong(newText);
+                    if (isWaitingForResult || userInputLong <= 0) {
+                        // unavailable or negative number
+                        if (userInputLong <= 0) {
+                            invalidInputToast.show();
+                        }
+                        buttonCalculateRoots.setEnabled(false);
+                    } else {
+                        buttonCalculateRoots.setEnabled(true);
+                        invalidInputToast.cancel();
+                    }
                 } catch (NumberFormatException e) {
+                    // not a long input
+                    if (!newText.equals("")) {
+                        invalidInputToast.show();
+                    }
                     buttonCalculateRoots.setEnabled(false);
                 }
             }
@@ -63,24 +79,15 @@ public class MainActivity extends AppCompatActivity {
             Intent intentToOpenService = new Intent(MainActivity.this, CalculateRootsService.class);
             // todo: check that `userInputString` is a number. handle bad input. convert `userInputString` to long
             String userInputString = editTextUserInput.getText().toString();
-            try {
-                long userInputLong = Long.parseLong(userInputString); // todo this should be the converted string from the user
-                if (userInputLong <= 0) {
-                    Toast.makeText(MainActivity.this, NON_POSITIVE_INPUT_MSG, Toast.LENGTH_SHORT).show();
-                    editTextUserInput.setText("");
-                }
-                ;
-                intentToOpenService.putExtra("number_for_service", userInputLong);
-                startService(intentToOpenService);
-                // todo: set views states according to the spec (below)
-                progressBar.setVisibility(View.VISIBLE);
-                buttonCalculateRoots.setEnabled(false);
-                editTextUserInput.setEnabled(false);
-                isWaitingForResult = true;
-            } catch (NumberFormatException e) {
-                Toast.makeText(MainActivity.this, NON_LONG_INPUT_MSG, Toast.LENGTH_SHORT).show();
-                editTextUserInput.setText("");
-            }
+            long userInputLong = Long.parseLong(userInputString); // todo this should be the converted string from the user
+
+            intentToOpenService.putExtra("number_for_service", userInputLong);
+            startService(intentToOpenService);
+            // todo: set views states according to the spec (below)
+            progressBar.setVisibility(View.VISIBLE);
+            buttonCalculateRoots.setEnabled(false);
+            editTextUserInput.setEnabled(false);
+            isWaitingForResult = true;
         });
 
         // register a broadcast-receiver to handle action "found_roots"
@@ -95,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 editTextUserInput.setEnabled(true);
                 editTextUserInput.setText("");
 
+                // send success info
                 Intent outComingIntent = new Intent(MainActivity.this, RootResultActivity.class);
                 outComingIntent.putExtra("root1", incomingIntent.getLongExtra("root1", 0));
                 outComingIntent.putExtra("root2", incomingIntent.getLongExtra("root2", 0));
@@ -116,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 editTextUserInput.setEnabled(true);
                 editTextUserInput.setText("");
 
+                // send failure info
                 long calcTime = incomingIntent.getLongExtra("time_until_give_up_seconds", 0);
                 String msg = "calculation aborted after " + calcTime + " seconds";
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
