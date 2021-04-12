@@ -18,6 +18,6 @@ class RootResultActivity : AppCompatActivity() {
         numberText.text = intent.getLongExtra("original_number", 0).toString()
         root1Text.text = intent.getLongExtra("root1", 0).toString()
         root2Text.text = intent.getLongExtra("root2", 0).toString()
-        calculationTimeText.text = "calculation took ${intent.getLongExtra("calculations_time", 0)} milliseconds"
+        calculationTimeText.text = "calculation took ${intent.getLongExtra("calculations_time", 0)} seconds"
     }
 }

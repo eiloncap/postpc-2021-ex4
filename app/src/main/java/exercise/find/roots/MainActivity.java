@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // send failure info
                 long calcTime = incomingIntent.getLongExtra("time_until_give_up_seconds", 0);
-                String msg = "calculation aborted after " + calcTime + " milliseconds";
+                String msg = "calculation aborted after " + calcTime + " seconds";
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         };

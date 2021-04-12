@@ -24,12 +24,11 @@ public class CalculateRootsService extends IntentService {
             return;
         }
 
-
         for (long i = 2L; i <= (long) Math.sqrt(numberToCalculateRootsFor); ++i) {
             long timePassed = System.currentTimeMillis() - timeStartMs;
-            if (timePassed >= 20L) {
+            if (timePassed >= 20000L) {
                 broadcast.setAction("stopped_calculations");
-                broadcast.putExtra("time_until_give_up_seconds", timePassed);
+                broadcast.putExtra("time_until_give_up_seconds", timePassed / 1000);
                 this.sendBroadcast(broadcast);
                 return;
             }
@@ -38,7 +37,7 @@ public class CalculateRootsService extends IntentService {
                 broadcast.setAction("found_roots");
                 broadcast.putExtra("root1", i);
                 broadcast.putExtra("root2", j);
-                broadcast.putExtra("calculations_time", timePassed);
+                broadcast.putExtra("calculations_time", timePassed / 1000);
                 this.sendBroadcast(broadcast);
                 return;
             }
@@ -46,27 +45,7 @@ public class CalculateRootsService extends IntentService {
         broadcast.setAction("found_roots");
         broadcast.putExtra("root1", numberToCalculateRootsFor);
         broadcast.putExtra("root2", 1L);
-        broadcast.putExtra("calculations_time", System.currentTimeMillis() - timeStartMs);
+        broadcast.putExtra("calculations_time", (System.currentTimeMillis() - timeStartMs) / 1000);
         this.sendBroadcast(broadcast);
-    /*
-     calculate the roots.
-     check the time (using `System.currentTimeMillis()`) and stop calculations if can't find an answer after 20 seconds
-     upon success (found a root, or found that the input number is prime):
-      send broadcast with action "found_roots" and with extras:
-       - "original_number"(long)
-       - "root1"(long)
-       - "root2"(long)
-     upon failure (giving up after 20 seconds without an answer):
-      send broadcast with action "stopped_calculations" and with extras:
-       - "original_number"(long)
-       - "time_until_give_up_seconds"(long) the time we tried calculating
-
-      examples:
-       for input "33", roots are (3, 11)
-       for input "30", roots can be (3, 10) or (2, 15) or other options
-       for input "17", roots are (17, 1)
-       for input "829851628752296034247307144300617649465159", after 20 seconds give up
-
-     */
     }
 }
