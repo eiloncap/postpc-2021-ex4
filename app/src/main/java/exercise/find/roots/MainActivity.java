@@ -126,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 // set views states
                 progressBar.setVisibility(View.GONE);
                 isWaitingForResult = false;
+                buttonCalculateRoots.setEnabled(true);
                 editTextUserInput.setEnabled(true);
-                editTextUserInput.setText("");
 
                 // send failure info
                 long calcTime = incomingIntent.getLongExtra("time_until_give_up_seconds", 0);

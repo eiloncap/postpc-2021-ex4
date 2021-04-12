@@ -14,6 +14,7 @@ class RootResultActivity : AppCompatActivity() {
         val root2Text: TextView = findViewById(R.id.root2Text)
         val calculationTimeText: TextView = findViewById(R.id.calculationTimeText)
 
+        // display results
         numberText.text = intent.getLongExtra("original_number", 0).toString()
         root1Text.text = intent.getLongExtra("root1", 0).toString()
         root2Text.text = intent.getLongExtra("root2", 0).toString()
