@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 outComingIntent.putExtra("root1", incomingIntent.getLongExtra("root1", 0));
                 outComingIntent.putExtra("root2", incomingIntent.getLongExtra("root2", 0));
                 outComingIntent.putExtra("original_number", incomingIntent.getLongExtra("original_number", 0));
+                outComingIntent.putExtra("calculations_time", incomingIntent.getLongExtra("calculations_time", 0));
                 startActivity(outComingIntent);
             }
         };
@@ -177,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
 
 /*
 
-TODO:
 the spec is:
 
 upon launch, Activity starts out "clean":
@@ -218,6 +218,5 @@ upon screen rotation (saveState && loadState) the new screen should show exactly
 * edit-text is disabled/enabled based on current "is waiting for calculation?" state
 * progress is showing/hidden based on current "is waiting for calculation?" state
 * button is enabled/disabled based on current "is waiting for calculation?" state && there is a valid number in the edit-text input
-
 
  */

@@ -38,6 +38,7 @@ public class CalculateRootsService extends IntentService {
                 broadcast.setAction("found_roots");
                 broadcast.putExtra("root1", i);
                 broadcast.putExtra("root2", j);
+                broadcast.putExtra("calculations_time", timePassed);
                 this.sendBroadcast(broadcast);
                 return;
             }
@@ -45,6 +46,7 @@ public class CalculateRootsService extends IntentService {
         broadcast.setAction("found_roots");
         broadcast.putExtra("root1", numberToCalculateRootsFor);
         broadcast.putExtra("root2", 1L);
+        broadcast.putExtra("calculations_time", System.currentTimeMillis() - timeStartMs);
         this.sendBroadcast(broadcast);
     /*
      calculate the roots.
